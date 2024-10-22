@@ -5,8 +5,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import companies from '../data/companies.json'
 import faq from '../data/faq.json'
-import Autoplay from "embla-carousel-autoplay"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import emblaCarouselAutoplay from 'embla-carousel-autoplay'
 
 
 export default function LandinPage() {
@@ -24,26 +24,29 @@ export default function LandinPage() {
           <Button variant="destructive" size="xl">Post Jobs</Button>
         </Link>
       </div>
-      <Carousel plugins={[
-        Autoplay({
-          delay: 2000,
-        }),
-      ]}
+      <Carousel
+        plugins={[
+          emblaCarouselAutoplay({
+            delay: 2000,
+          }),
+        ]}
         className="w-full py-10"
       >
         <CarouselContent className="flex gap-5 sm:gap-20 items-center">
           {companies.map(({ name, id, path }) => {
             return (
-              <CarouselItem key={id} className="basis-1/6 lg:basis=1/8">
-                <img src={path} alt={name}
-                  className='h-9 sm:h-14 object-contain' />
+              <CarouselItem key={id} className="basis-1/6 lg:basis-1/8">
+                <img
+                  src={path}
+                  alt={name}
+                  className="h-9 sm:h-14 object-contain"
+                />
               </CarouselItem>
-            )
-
+            );
           })}
         </CarouselContent>
-
       </Carousel>
+
       <img src="/banner.jpeg" alt="banner" className='w-full ' />
 
       <section className='grid grid-cols-1 md:grid-cols-2 gap-4'>
@@ -73,7 +76,7 @@ export default function LandinPage() {
             <AccordionItem key={index} value={`item-${index++}`}>
               <AccordionTrigger>{item.question}</AccordionTrigger>
               <AccordionContent>
-               {item.answer}
+                {item.answer}
               </AccordionContent>
             </AccordionItem>
           )

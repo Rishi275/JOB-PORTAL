@@ -19,6 +19,7 @@ export default function JobListing() {
   const { isLoaded } = useUser()
 
 
+
   const { fn: fnJobs, data: jobs, loading: loadingJobs } = useFetch(getJobs, { searchQuery, location, company_id })
 
 
@@ -37,7 +38,7 @@ export default function JobListing() {
 
   // console.log(jobs) // this Jobs are comming from supabase database
   // -----------------------------------------------------------
-  const hnadleSearch = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     let formData = new FormData(e.target);
     const query = formData.get("search-query");
@@ -67,7 +68,7 @@ export default function JobListing() {
       <h1 className='gradient-title font-extrabold text-6xl sm:text-7xl text-center pb-8' >Latest Jobs</h1>
 
       {/* {filters} */}
-      <form action="" onSubmit={hnadleSearch} className='h-14 flex w-full gap-2
+      <form action="" onSubmit={handleSearch} className='h-14 flex w-full gap-2
        items-cente mb-3'>
         <Input
           type="text"
@@ -104,7 +105,7 @@ export default function JobListing() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {companies.map(({ name, id }) => {
+              {companies?.map(({ name, id }) => {
                 return <SelectItem key={name} value={id}>{name}</SelectItem>
               })}
             </SelectGroup>
