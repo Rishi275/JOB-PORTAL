@@ -1,65 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
-import { Button } from './ui/button'
-import { SignIn, SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import React, { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Button } from './ui/button';
+import { SignIn, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { BriefcaseBusiness, Heart, PenBox } from "lucide-react";
-import { useUser } from '@clerk/clerk-react'
-
+import { useUser } from '@clerk/clerk-react';
 
 export default function Header() {
-
-    const [showSignIn, setSowSignIn] = useState(false)
+    const [showSignIn, setShowSignIn] = useState(false); // Keep the same variable names
     const [search, setSearch] = useSearchParams();
     const { user } = useUser();
+
     useEffect(() => {
         if (search.get('sign-in')) {
-            setSowSignIn(true);
+            setShowSignIn(true);
         }
-    }, [search])
+    }, [search]);
 
     const handleOverlayClick = (e) => {
-        if (e.target == e.currentTarget) {
-            setSowSignIn(false);
+        if (e.target === e.currentTarget) {
+            setShowSignIn(false);
             setSearch({});
         }
-    }
+    };
+
     return (
         <>
             <nav className='py-4 flex justify-between items-center'>
-                <Link>
-                    <img src="/hirred.png" alt="logo" className='w-20' /></Link>
+                <Link to="/">
+                    <img src="/hirred.png" alt="logo" className='w-20' />
+                </Link>
 
-                {/* <Button varient="outline" >Login</Button> */}
-
-                <div className="login_signup flex gap-8 ">
-                    {/* these signupss comming from clerk.com website */}
+                <div className="flex gap-8">
+                    {/* Clerk sign-in and sign-out logic */}
                     <SignedOut>
-                        <Button variant="outline"
-                            onClick={() => { setSowSignIn(true) }}
-                        >Login</Button>
-                        <SignInButton />
+                        {/* Removed SignInButton to avoid duplication */}
+                        <Button variant="outline" onClick={() => setShowSignIn(true)}>
+                            Login
+                        </Button>
                     </SignedOut>
                     <SignedIn>
-                        {/* add a condition show a button post job when user is recruiter */}
                         {user?.unsafeMetadata?.role === "recruiter" && (
-
                             <Link to="/post-job">
                                 <Button variant="destructive" className="rounded-full">
-                                    <PenBox size={20} className="mr-2" />  Post a Job
+                                    <PenBox size={20} className="mr-2" /> Post a Job
                                 </Button>
                             </Link>
                         )}
-                        <UserButton appearance={{
-                            elements: {
-                                avatarBox: "w-10 h-10",
-                            },
-                        }}>
+                        <UserButton appearance={{ elements: { avatarBox: "w-10 h-10" } }}>
                             <UserButton.MenuItems>
                                 <UserButton.Link
                                     label='My Jobs'
                                     href='/my-jobs'
-                                    labelIcon={<BriefcaseBusiness size={15} />} />
-
+                                    labelIcon={<BriefcaseBusiness size={15} />}
+                                />
                                 <UserButton.Link
                                     label='Saved Jobs'
                                     href='/saved-jobs'
@@ -70,17 +63,16 @@ export default function Header() {
                     </SignedIn>
                 </div>
             </nav>
+            
+            {/* Sign-in overlay when triggered */}
             {showSignIn && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50' onClick={handleOverlayClick}>
                     <SignIn
                         signUpForceRedirectUrl="/onboarding"
-                        falbackRedirectUrl="/onboarding"
-                    >
-                    </SignIn>
+                        fallbackRedirectUrl="/onboarding"
+                    />
                 </div>
             )}
         </>
-    )
+    );
 }
-
-
