@@ -17,8 +17,11 @@ import {
 import { updateApplicationStatus } from "@/api/apiApplication";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
+import { useEffect, useState } from "react";
 
 const ApplicationCard = ({ application, isCandidate = false }) => {
+  const [status, setStatus] = useState(application.status); // Local state for status
+
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = application?.resume;
@@ -33,9 +36,16 @@ const ApplicationCard = ({ application, isCandidate = false }) => {
     }
   );
 
-  const handleStatusChange = (status) => {
-    fnHiringStatus(status).then(() => fnHiringStatus());
+  const handleStatusChange = (newStatus) => {
+    fnHiringStatus(newStatus).then(() => {
+      setStatus(newStatus); // Update local status
+    });
   };
+
+  // Update status if application changes
+  useEffect(() => {
+    setStatus(application.status);
+  }, [application.status]);
 
   return (
     <Card>
@@ -72,12 +82,12 @@ const ApplicationCard = ({ application, isCandidate = false }) => {
         <span>{new Date(application?.created_at).toLocaleString()}</span>
         {isCandidate ? (
           <span className="capitalize font-bold">
-            Status: {application.status}
+            Status: {status} {/* Show the local status */}
           </span>
         ) : (
           <Select
             onValueChange={handleStatusChange}
-            defaultValue={application.status}
+            defaultValue={status}
           >
             <SelectTrigger className="w-52">
               <SelectValue placeholder="Application Status" />
