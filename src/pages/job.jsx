@@ -32,7 +32,7 @@ const JobPage = () => {
 
   useEffect(() => {
     if (isLoaded) fnJob();
-  }, [isLoaded]);
+  }, []);
 
   const { loading: loadingHiringStatus, fn: fnHiringStatus } = useFetch(
     updateHiringStatus,
